@@ -117,9 +117,9 @@ header-includes: |
 \end{tikzpicture}
 \end{centering}
 
-# Boost::Histogram (C++14)
+# Boost.Histogram (C++14)
 
-## Intro to Boost::Histogram
+## Intro to Boost.Histogram
 
 * Multidimensional templated header-only histogram library: \github{boostorg/histogram}
 * Designed by Hans Dembinski, inspired by ROOT, GSL, and histbook
@@ -194,7 +194,7 @@ header-includes: |
 \end{center}
 \vspace{-.1cm}
 
-\uncover<2>{\color{presHighlight} \bfseries Boost 1.70 now released with Boost::Histogram!}
+\uncover<2>{\color{presHighlight} \bfseries Boost 1.70 now released with Boost.Histogram!}
 \vspace{.1cm}
 
 :::
@@ -205,7 +205,7 @@ header-includes: |
 
 ## Intro to the Python bindings
 
-* Boost::Histogram developed with Python in mind
+* Boost.Histogram developed with Python in mind
 * Original bindings based on Boost::Python
     * Hard to build and distribute
     * Somewhat limited
@@ -226,15 +226,13 @@ header-includes: |
 
 
 ## Design
-
-* Supports Python 2.7 and 3.4+
 * 260+ unit tests run on Azure on Linux, macOS, and Windows
 * Up to 16 axes supported (may go up or down)
-* 1D, 2D, and ND histograms all have the same interface
 
-Tries to stay close to the original [Boost::Histogram](https://www.boost.org/doc/libs/1_70_0/libs/histogram/doc/html/index.html) where possible.
+Resembles the original [Boost.Histogram](https://www.boost.org/doc/libs/1_70_0/libs/histogram/doc/html/index.html) where possible, with
+changes where needed for Python performance and idioms.
 
-\vspace{.5cm}
+\vspace{.2cm}
 
 ::: columns
 ::: {.column width=48%}
@@ -250,6 +248,8 @@ auto hist = bh::make_histogram(
   bh::axis::regular<>{4, 0, 1, "y"});
 
 hist(.2, .3);
+hist(.4, .5);
+hist(.3, .2);
 ```
 :::
 ::: {.column width=55%}
@@ -260,11 +260,13 @@ hist(.2, .3);
 import boost.histogram as bh
 
 
-hist = bh.make_histogram(
+hist = bh.histogram(
   bh.axis.regular(2, 0, 1, metadata="x"),
   bh.axis.regular(4, 0, 1, metadata="y"))
 
-hist(.2, .3)    
+hist.fill(
+    [.2, .4, .3],
+    [.3, .5, .2])
 ```
 
 :::
@@ -294,14 +296,6 @@ hist * 2.0
 
 \vspace{.3cm}
 
-**Project** a 3D histogram to 2D
-
-```python
-hist.project(0,1) # select axis
-```
-
-\vspace{.3cm}
-
 **Sum** a histogram contents
 
 ```pyhton
@@ -325,7 +319,7 @@ axis0.bin(1) # The bin accessors
 **Fill** 2D histogram with values or arrays
 
 ```python
-hist(x, y)
+hist.fill(x, y)
 ```
 
 \vspace{.3cm}
@@ -333,7 +327,7 @@ hist(x, y)
 **Fill** copies in 4 threads, then merge
 
 ```python
-hist.fill_threaded(4, x, y)
+hist.fill(x, y, threads=4)
 ```
 
 \vspace{.3cm}
@@ -341,7 +335,7 @@ hist.fill_threaded(4, x, y)
 **Fill** in 4 threads (atomic storage only)
 
 ```python
-hist.fill_atomic(4, x, y)
+hist.fill(x, y, atomic=4)
 ```
 
 \vspace{.3cm}
@@ -350,13 +344,60 @@ hist.fill_atomic(4, x, y)
 
 ```python
 hist.view()
-# Or
-np.asarray(hist)
 ```
 
 :::
 :::
 
+
+
+## Planned: Histogram slicing syntax
+
+See [#35](https://github.com/scikit-hep/boost-histogram/issues/35).
+
+### Access:
+
+```python
+v = h[b]                      # Returns bin contents, indexed by bin number
+v = h[loc(b)]                        # Returns the bin containing the value
+```
+
+
+### Setting
+```python
+h[...] = np.ndarray(...)      # Setting with an array or histogram sets the
+                              # contents if the sizes match
+```
+
+## Planned: Histogram slicing syntax (2)
+
+
+### Slicing:
+```python
+h == h[:]                                           # Slice over everything
+h2 = h[a:b]                       # Slice of histogram (includes flow bins)
+h2 = h[:b]                                  # Leaving out endpoints is okay
+h2 = h[loc(v):]                    # Slices can be in data coordinates, too
+h2 = h[::project]                                   # Projection operations
+h2 = h[::rebin(2)]                        # Modification operations (rebin)
+h2 = h[a:b:rebin(2)]                # Modifications can combine with slices
+h2 = h[a:b:project]      # Adding endpoints to projection operation removes
+                         # under or overflow from the calculation
+h2 = h[0:len(h2.axis(0)):project]            # Projection without flow bins
+h2 = [a:b, ...]                      # Ellipsis work just like normal numpy
+h2 = h[::rebin(loc(width))]                # WIP: This should be considered
+```
+
+## Planned: Histogram slicing syntax (3)
+
+### Invalid syntax:
+
+```python
+h[v, a:b] # You cannot mix slices and bin contents access (h is an integer)
+h[1.0]                            # Floats are not allowed, just like numpy
+h[::2]                              # Skipping is not (currently) supported
+h[..., None]                          # None == np.newaxis is not supported
+```
 
 
 ## Flexibility: Axis
@@ -462,7 +503,7 @@ np.asarray(hist)
 
 ## Performance
 
-The following measurements are with:
+The following classic measurements are with:
 
 ::: columns
 ::: column
@@ -601,57 +642,47 @@ See my [histogram performance post](https://iscinumpy.gitlab.io/post/histogram-s
 
 * We *must* provide excellent distribution.
     * If anyone writes `pip install boost-histogram` and it fails, we have failed.
-* Docker ManyLinux1 GCC 8.3: \github{scikit-hep/manylinuxgcc}
+* Docker ManyLinux1 GCC 9: \github{scikit-hep/manylinuxgcc}
+* Used in \github{scikit-hep/iMinuit}, see \github{scikit-hep/azure-wheel-helpers}
 
 ::: columns
 ::: column
 
 ### Wheels
-* manylinux1 32, 64 bit (ready)
-* manylinux2010 64 bit (planned)
-* macOS 10.9+ (wip)
-* Windows 32, 64 bit, Python 3.6+ (wip)
-    * Is Python 2.7 Windows needed?
+* manylinux1 32 and 64 bit, Py 2.7 & 3.5+
+* manylinux2010 64 bit, Py 2.7 & 3.5+
+* macOS 10.9+ 64 bit, Py 2.7 & 3.6+
+* Windows 32 and 64 bit, Py 2.7 & 3.6+
 
 :::
 ::: column
 
 ### Source
-* SDist (ready)
-* Build directly from GitHub (done)
+* SDist
+* Build directly from GitHub
 
 ### Conda
-* conda package (planned, easy)
+* conda-forge package planned when released
 
 :::
 :::
 
-\vspace{.5cm}
 
 ```bash
 python -m pip install \
     git+https://github.com/scikit-hep/boost-histogram.git@develop
 ```
 
-
-
+\vspace{.3cm}
 
 ## Plans
 
-- Add shortcuts for axis types, fill out axis types
-- Allow view access into unlimited storage histograms
 - Add `from_numpy` and numpy style shortcut(s)
-- Filling
-    - Samples
-    - Weights
-    - Non-numerical fill (if possible)
-- Add profile, weighted_profile histograms
+- Filling improvements (speed, flexibility)
+- Support edges/centers matrices and direct setting
 - Add reduce operations
 - Release to PyPI
-- Add some docs and read the docs support
-
-### First alpha
-Release planned this week
+- Add [more docs](https://boost-histogram.readthedocs.io/en/latest/)
 
 ## Bikeshedding (API discussion)
 
@@ -666,7 +697,7 @@ Let's discuss API! (On [GitHub issues](https://github.com/scikit-hep/boost-histo
 * Download: `pip install boost-histogram` (WIP)
 * Use: `import boost.histogram as bh`
 * Create: `hist = bh.histogram(bh.axis.regular(12,0,1))`
-* Fill: `hist(values)`
+* Fill: `hist.fill(values)`
 * Access values, convert to numpy, etc.
 
 :::
@@ -679,6 +710,10 @@ Let's discuss API! (On [GitHub issues](https://github.com/scikit-hep/boost-histo
 
 ### Documentation
 * The documentation will also need useful examples, feel free to contribute!
+
+## Progress
+
+See [#18](https://github.com/scikit-hep/boost-histogram/issues/18)
 
 # hist
 
@@ -715,7 +750,6 @@ Join in the development! This should combine the best features of other packages
 :::
 :::
 
-# Questions?
 
-## Backup
+## Support
 * Supported by [IRIS-HEP](http://iris-hep.org), [NSF OAC-1836650](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1836650)
