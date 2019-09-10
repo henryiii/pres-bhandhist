@@ -703,7 +703,7 @@ Let's discuss API! (On [GitHub issues](https://github.com/scikit-hep/boost-histo
 :::
 ::: {.column width=40%}
 
-\includegraphics[width=\textwidth, trim=0 8.5in 5.2in 0, clip]{Bikeshedding.pdf}
+\includegraphics[width=\textwidth, trim=0 8.5in 5.2in 0, clip]{images/Bikeshedding.pdf}
 
 :::
 :::
