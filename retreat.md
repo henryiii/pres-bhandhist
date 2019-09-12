@@ -369,7 +369,7 @@ The fastest, most universal way to get ROOT on macOS or Linux, for Python and mo
 
 ## Packages
 
-* ROOT 6.18/00
+* ROOT 6.18/04
 * Pythia8
 * Uproot
 * HEPMC2
