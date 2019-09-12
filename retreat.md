@@ -9,8 +9,73 @@ header-includes: |
     \usetikzlibrary{decorations.pathreplacing}
 ---
 
+# About me
 
-# Intro to Boost.Histogram C++14
+::: columns
+::: column
+
+\begin{center}
+\begin{tikzpicture}
+\clip (0,0) circle (1.2cm) node {\includegraphics[width=2.4cm]{images/avatar.jpg}};
+\end{tikzpicture}
+
+\textbf{Henry Schreiner}
+
+Computational Physicist /\\
+Research Software Engineer
+
+\emph{Princeton University}
+\end{center}
+
+\vspace{1.3em}
+
+* University of Texas at Austin
+    - MayaMuon experiment
+* University of Cincinnati
+    * LHCb
+
+::: 
+::: column
+
+* Author of [iscinumpy.gitlab.io](https://iscinumpy.gitlab.io)
+* Some work on [iris-hep.org](https://iris-hep.org)
+* Redesigned [scikit-hep.org](http://scikit-hep.org)
+* Desired hobby: Computer graphics/modeling
+* Actual hobby: Raising a 3-year old
+
+\begin{center}
+\includegraphics[width=1.22\textwidth, trim=200 0 0 0]{images/UTFastTimesFigure3.png}
+\end{center}
+
+:::
+:::
+
+
+# AS: boost-histogram (Python)
+
+
+\github{scikit-hep/boost-histogram}
+
+* 0-dependency build (C++14 only)
+* State-of-the-art PyBind11
+* 280+ unit tests run on Azure on Linux, macOS, and Windows
+* Binary wheels on Azure for all major platforms
+    - Machinery already in use for iMinuit, helping other Scikit-HEP packages
+- [Read the docs (in progress)](https://boost-histogram.readthedocs.io/en/latest/)
+
+\vspace{.5cm}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.25]
+\node [rectangle, rounded corners, white, fill=presDark, minimum width=2.2cm, minimum height=.75cm] at (0,0) {Design};
+\node [rectangle, rounded corners, white, fill=presLight2, minimum width=2.2cm, minimum height=.75cm] at (2.5,0) {\vphantom{g}Flexibility};
+\node [rectangle, rounded corners, white, fill=presDark2, minimum width=2.2cm, minimum height=.75cm] at (5,0) {Speed};
+\node [rectangle, rounded corners, white, fill=presLight, minimum width=2.2cm, minimum height=.75cm] at (7.5,0) {\vphantom{g}Distribution};
+\end{tikzpicture}
+\end{center}
+
+
+# Boost.Histogram C++14 (Part of Boost since 1.70)
 
 * Multidimensional templated header-only histogram library: \github{boostorg/histogram}
 * Designed by Hans Dembinski, inspired by ROOT, GSL, and histbook
@@ -86,31 +151,6 @@ header-includes: |
 
 :::
 :::
-
-
-
-# AS: boost-histogram (Python)
-
-
-\github{scikit-hep/boost-histogram}
-
-* 0-dependency build (C++14 only)
-* State-of-the-art PyBind11
-* 280+ unit tests run on Azure on Linux, macOS, and Windows
-* Binary wheels on Azure for all major platforms
-    - Machinery already in use for iMinuit, helping other Scikit-HEP packages
-- [Read the docs (in progress)](https://boost-histogram.readthedocs.io/en/latest/)
-
-\vspace{.5cm}
-
-\begin{center}
-\begin{tikzpicture}[scale=1.25]
-\node [rectangle, rounded corners, white, fill=presDark, minimum width=2.2cm, minimum height=.75cm] at (0,0) {Design};
-\node [rectangle, rounded corners, white, fill=presLight2, minimum width=2.2cm, minimum height=.75cm] at (2.5,0) {\vphantom{g}Flexibility};
-\node [rectangle, rounded corners, white, fill=presDark2, minimum width=2.2cm, minimum height=.75cm] at (5,0) {Speed};
-\node [rectangle, rounded corners, white, fill=presLight, minimum width=2.2cm, minimum height=.75cm] at (7.5,0) {\vphantom{g}Distribution};
-\end{tikzpicture}
-\end{center}
 
 
 # Design demo
@@ -275,8 +315,8 @@ hist2.sum()
 \node (bh) at (-.5,0)   [presDark2]  {\vphantom{yH}boost-histogram};
 \node (root) at (2,0)   [presDark2] {\vphantom{yH}ROOT};
 
-\node at (-2.5,-1) [left, presLight2] {\vphantom{yH}Universal adaptor};
-\node (aghast) at (0,-1) [presLight2] {\vphantom{yH}Aghast};
+\node at (-2.5,-1) [left, presLight] {\vphantom{yH}Universal adaptor};
+\node (aghast) at (0,-1) [presLight] {\vphantom{yH}Aghast};
 
 \node at (-2.5,-2)     [left, presLight2] {\vphantom{yH}Front ends (plotting, etc)};
 \node (hist) at (-1.5,-2)    [presLight2] {\vphantom{yH}hist};
@@ -332,9 +372,14 @@ The fastest, most universal way to get ROOT on macOS or Linux, for Python and mo
 * ROOT 6.18/00
 * Pythia8
 * Uproot
+* HEPMC2
+* HEPMC3
+* xrootd
 
 :::
 ::: {.column width=70%}
+
+\vspace{.75cm}
 
 * Full support for environments
     * no `thisroot.sh`
