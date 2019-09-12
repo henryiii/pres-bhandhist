@@ -30,9 +30,9 @@ Research Software Engineer
 \vspace{1.3em}
 
 * University of Texas at Austin
-    - MayaMuon experiment
+    - MayaMuon experiment - cosmic ray measurement, Belize pyramids
 * University of Cincinnati
-    * LHCb
+    * LHCb - Fast fitting in charm
 
 ::: 
 ::: column
