@@ -1,0 +1,12 @@
+name: boostex
+dependencies:
+    - python>=3.6
+    - jupyterlab
+    - matplotlib
+    - nb_conda_kernels
+    - numba
+    - numpy
+    - pandas
+    - pip
+    - pip:
+      - boost-histogram
