@@ -113,19 +113,19 @@ is most general but requires a sorted search.
 * 1D Regular
 ```python
 h = ROOT.TH1D("", "", 10, 0, 1)
-h.fillN(arr)
+h.FillN(len(arr), arr, ROOT.nullptr)
 ```
 
 * 1D Variable
 ```python
 h = ROOT.TH1D("", "", (1,2,3,4,5,6))
-h.fillN(arr)
+h.FillN(len(arr), arr, ROOT.nullptr)
 ```
 
 * 2D Regular
 ```python
 h = ROOT.TH2D("", "", 10, 0, 1, 20, 0, 2)
-h.fillN(arr)
+h.FillN(len(arr[0]), *arr, ROOT.nullptr)
 ```
 
 # Histogram in Numpy
@@ -178,13 +178,13 @@ b, e1, e2 = np.histogram2d(x, y, bins=(10,20), range=((0,1),(0,2)))
 * Iterative fill option
 * Weights option
 * Can track sum of weights too
+* Has profile histograms
 :::
 :::column
 
 ## Cons
-* ROOT requirement (Conda-forge helps)
-* Can be slow in Python (and C++)
-* Poor interactive exploration
+* ROOT requirement (Conda-Forge helps)
+* Unpythonic interactive exploration
 * Odd syntax, odd memory model
 * Max 3D
 :::
@@ -581,7 +581,6 @@ hist = bh.histogram(
 hist.fill(
     [.2, .4, .3],
     [.3, .5, .2])
-```
 
 :::
 :::
@@ -621,10 +620,13 @@ hist.sum()
 **Access** an axis
 
 ```python
-ax = hist.axis(0)
+ax = hist.axes[0]
 ax.edges   # The edges array
 ax.centers # Centers of bins
 ax.widths  # Width of each bin
+
+hist.axes.centers # All centers
+# Etc.
 ```
 
 

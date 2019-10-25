@@ -202,3 +202,5 @@ TSWLatexianTemp*
 
 # auto folder when using emacs and auctex 
 /auto/*
+
+.ipynb_checkpoints/
