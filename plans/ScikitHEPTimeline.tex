@@ -1,0 +1,81 @@
+\documentclass{standalone}
+\usepackage{pgfgantt}
+\begin{document}
+\begin{ganttchart}[
+	time slot format=isodate-yearmonth, vgrid,
+	today=2019-10,
+	x unit=1cm,
+	y unit title=.6cm,
+	y unit chart=.6cm,
+	title top shift=0, title height=1,
+	time slot unit=month,
+	link/.style={red, opacity=.5, thick},
+	bar label font=\normalsize\color{black!60},
+	bar/.style={fill=black!40}
+	]{2019-08}{2020-10}
+
+    \gantttitle{Jim}{15}\\
+
+	\ganttgroup[progress=today]{Awkward 1.0}{2019-08}{2020-3}\\
+	\ganttbar{Foundational}{2019-08}{2020-01}\\
+	\ganttlinkedbar[name=narr]{Features}{2020-02}{2020-03}\\
+	\ganttbar{Vector}{2020-04}{2020-04}\\
+	\ganttbar{Uproot 4.0}{2020-05}{2020-05} \\
+	\ganttbar{Aghast}{2020-06}{2020-07} \\
+	\ganttbar{Jupyter books?}{2020-06}{2020-10} \\
+	\ganttbar{Awkward on GPU}{2020-06}{2020-10} \\
+		
+	
+	\gantttitle{Henry}{15}\\
+	
+	\ganttgroup[progress=90]{Boost Histogram}{2019-08}{2019-12}\\
+	\ganttbar{Full beta}{2019-08}{2019-11}\\
+	\ganttlinkedbar{Integration and 1.0}{2019-12}{2019-12} \\
+	\ganttbar{Hist}{2019-12}{2020-01}
+	\ganttbar[inline, bar inline label node/.style={above, font=\color{black!60}}]{Hist with student}{2020-05}{2020-10} \\
+	
+	\ganttbar[name=nvec]{Vector}{2020-01}{2020-05}\\
+	\ganttbar[name=nhist]{Numba Histograms}{2020-06}{2020-09}\\
+	
+	\ganttmilestone[inline, name=nevent, milestone inline label node/.append style={left=32mm}]{Event loops in Numba}{2020-09} \\
+	
+	\ganttlink{nhist}{nevent}
+	\ganttlink{narr}{nevent}
+	\ganttlink{nvec}{nevent}
+	
+	\gantttitlecalendar{month, year}
+
+\end{ganttchart}
+\end{document}
+
+
+%gantt
+%dateFormat  YYYY-MM-DD
+%title Awkward Family
+%axisFormat %b %Y
+%
+%section Jim
+%Awk Foundational :active, awk1, 2019-10-01, 2020-01-01
+%Awk Features       : awk2, after awk1, 2020-03-01
+%Vector                 : awk3, after awk2, 2020-04-01
+%Uproot 4.0          : awk4, after awk3, 2020-05-01
+%Aghast                : awk5, after awk4, 2020-07-01
+%JupyterBooks : awk6, after awk4, 2020-09-01
+%
+%section Jim w/student
+%GPU Awkward : j21, 2020-05-15, 2020-09-01
+%
+%section Henry
+%boost-histogram 0.7 :active, hen1, 2019-11-01, 2019-12-01
+%boost-histogram 1.0 : hen2, after hen1, 2020-01-01
+%Vector Foundational : hen3, after hen2, 2020-03-01
+%Vector Features : hen4, after hen3, 2020-05-01 
+%Numbafy Histograms : hen5, after hen4, 2020-09-01
+%
+%section Henry w/student
+%Hist : h21, 2020-05-15, 2020-09-01
+
+% RNTuple, and not NSF funded
+% Add ? for JupyterBooks
+% Mark and Ben are working with Rob Gardner
+% Look into PyHF for histograms
