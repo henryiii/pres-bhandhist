@@ -1,0 +1,74 @@
+\documentclass[crop,tikz]{standalone}
+\usepackage{hyperref}
+
+\definecolor{presDark}{RGB}{39,1,136}
+\definecolor{presDark2}{RGB}{87,80,149}
+\definecolor{presLight}{RGB}{139,131,215}
+\definecolor{presLight2}{RGB}{0,129,203}
+
+\definecolor{presHighlight}{RGB}{215,50,50}
+
+
+\begin{document}
+\begin{tikzpicture}[every path/.style={thick}, font=\sffamily]
+\begin{scope}[xscale=4, yshift=-.1cm, presDark]
+\draw (0,0) -- (1,0);
+\foreach \i in {0, .1, ..., 1.1} {
+    \draw (\i,0) -- (\i,.2);
+}
+\node at (0,.2) [above] {0};
+\node at (.5,.2) [above] {0.5};
+\node at (1,.2) [above] {1};
+\node at (.5,0) [below] {\verb|bh.axis.Regular(10, 0, 1)|};
+\end{scope}
+
+\begin{scope}[yshift=-2.3cm, xshift=2cm, presLight2]
+\draw (0,0) circle (.75);
+\foreach \i in {0, 45, ..., 360} {
+    \draw (\i:.75) -- (\i:.95);
+}
+\node at (0:.95) [right]  {$\pi/2$};
+\node at (90:.95) [above] {0, $2\pi$};
+\node at (180:.95) [left] {$\pi$};
+\node at (270:.95) [below] {$3\pi/3$};
+\node at (0,-1.3) [below] {\verb|bh.axis.Regular(8, 0, 2*np.pi, circular=True)|};
+\end{scope}
+
+\begin{scope}[xscale=4, yshift=-5.1cm, presDark]
+\draw (0,0) -- (1,0);
+\foreach \i in {0, .3, .5, 1} {
+    \draw (\i,0) -- (\i,.2);
+}
+\node at (0,.2) [above] {0};
+\node at (.3,.2) [above] {0.3};
+\node at (.5,.2) [above] {0.5};
+\node at (1,.2) [above] {1};
+\node at (.5,0) [below] {\verb|bh.axis.Variable([0, .3, .5, 1])|};
+\end{scope}
+
+\begin{scope}[xscale=4, yshift=-6.3cm, presLight2]
+\draw (0,0) -- (1,0);
+\foreach \i in {0, .2, ..., 1} {
+    \draw (\i,0) -- (\i,.2);
+}
+\foreach \i in {0,...,4} {
+    \node at (\i/5 + .1, 0) [above] {\i};
+}
+\node at (.5,0) [below] {\verb|bh.axis.Integer(0, 5)|};
+\end{scope}
+
+\begin{scope}[xscale=4, yshift=-7.5cm, presDark]
+\draw (0,0) -- (1,0);
+\foreach \i in {0, .2, ..., 1} {
+    \draw (\i,0) -- (\i,.2);
+}
+\node at (.1, 0) [above] {2};
+\node at (.3, 0) [above] {5};
+\node at (.5, 0) [above] {8};
+\node at (.7, 0) [above] {3};
+\node at (.9, 0) [above] {7};
+\node at (.5,0) [below] {\verb|bh.axis.Category([2, 5, 8, 3, 7])|};
+\end{scope}
+
+\end{tikzpicture}
+\end{document}
