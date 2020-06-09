@@ -1,0 +1,21 @@
+\documentclass[tikz]{standalone}
+
+\begin{document}
+	
+	\begin{tikzpicture}[
+	font=\sffamily,
+	thick]
+
+\draw (0,0) -- (10,0);
+\foreach \i in {0, 2, ..., 10} {
+    \draw (\i,0) -- (\i,.3);
+}
+\node at (1, 0.1) [above] {2};
+\node at (3, 0.1) [above] {5};
+\node at (5, 0.1) [above] {8};
+\node at (7, 0.1) [above] {3};
+\node at (9, 0.1) [above] {7};
+
+\end{tikzpicture}
+
+\end{document}

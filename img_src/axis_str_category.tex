@@ -1,0 +1,21 @@
+\documentclass[tikz]{standalone}
+
+\begin{document}
+	
+\begin{tikzpicture}[
+	font=\sffamily,
+	thick]
+
+\draw (0,0) -- (10,0);
+\foreach \i in {0, 2, ..., 10} {
+    \draw (\i,0) -- (\i,.3);
+}
+\node at (1, 0) [above] {\vphantom{lg}\verb|"Py"|};
+\node at (3, 0) [above] {\vphantom{lg}\verb|"th"|};
+\node at (5, 0) [above] {\vphantom{lg}\verb|"o"|};
+\node at (7, 0) [above] {\vphantom{lg}\verb|"n"|};
+\node at (9, 0) [above] {\vphantom{lg}\verb|"3"|};
+
+\end{tikzpicture}
+
+\end{document}
